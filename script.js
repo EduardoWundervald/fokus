@@ -9,6 +9,11 @@ const musicaFocoInput = document.querySelector(
  '#alternar-musica'
 );
 const musica = new Audio('./sons/luna-rise-part-one.mp3');
+const duracaoFoco = 25 * 60;
+const duracaoCurto = 5 * 60;
+const duracaoLongo = 15 * 60;
+let tempoDecorridoEmSegundos = duracaoFoco;
+let intervaloId = null;
 
 musica.loop = true;
 
@@ -32,18 +37,18 @@ musicaFocoInput.addEventListener('change', async () => {
 focoBt.addEventListener('click', () => {
     alterarContexto('foco');
     focoBt.classList.add('active');
+    tempoDecorridoEmSegundos = duracaoFoco;
 });
 curtoBt.addEventListener('click', () => {
     alterarContexto('descanso-curto');
     curtoBt.classList.add('active');
+    tempoDecorridoEmSegundos = duracaoCurto;
 });
 longoBt.addEventListener('click', () => {
     alterarContexto('descanso-longo');
     longoBt.classList.add('active');
+    tempoDecorridoEmSegundos = duracaoLongo;
 });
-
-let tempoDecorridoEmSegundos = 5;
-let intervaloId = null;
 
 const startPauseBt = document.querySelector('#start-pause');
 // Cancela o intervalo ativo
@@ -81,6 +86,7 @@ function iniciarOuPausar() {
 startPauseBt.addEventListener('click', iniciarOuPausar);
 
 function alterarContexto(contexto) {
+    zerar();
     // Remove o destaque de todos os botões
     botoes.forEach((botao) => {
     botao.classList.remove('active');
